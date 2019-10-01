@@ -234,6 +234,34 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
 
 
 
+    //Bishop
+
+    if(pieceName.contains("Bishup")){
+      if ((landingX < 0 || landingX > 7) || (landingY < 0 || landingY > 7 )) {
+        validMove = false;
+      }
+      else{
+        if (xMovement == yMovement) {
+          if (!piecePresent(e.getX(), e.getY())) {
+              validMove = true;
+              if (pieceName.contains("White")) {
+                 if (checkWhiteOponent(e.getX(), e.getY())) {
+                   validMove = true;
+                 }
+              }
+              else{
+                 if (checkBlackOponent(e.getX(), e.getY())) {
+                   validMove = true;
+                 }
+             }
+          }
+        }
+      }
+    }
+
+
+
+
 
 
 
