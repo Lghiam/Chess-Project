@@ -14,12 +14,12 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
     JLabel chessPiece;
     int xAdjustment;
     int yAdjustment;
-	int startX;
-	int startY;
-	int initialX;
-	int initialY;
-	JPanel panels;
-	JLabel pieces;
+		int startX;
+		int startY;
+		int initialX;
+		int initialY;
+		JPanel panels;
+		JLabel pieces;
 
 
     public ChessProject(){
@@ -204,6 +204,13 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
     int landingY=(e.getY()/75);
     int xMovement=Math.abs((e.getX()/75)-startX);
     int yMovement=Math.abs((e.getY()/75)-startY);
+    System.out.println("----------------------------------------------");
+    System.out.println("The piece that is being moved is : "+pieceName);
+    System.out.println("The starting coordinates are : "+"( "+startX+","+startY+" )");
+    System.out.println("The xMovement is :"+xMovement);
+    System.out.println("The yMovement is :"+yMovement);
+    System.out.println("The landing coordinates are : "+"( "+landingX+","+landingY+")");
+    System.out.println("----------------------------------------------");
 		/*
 			The only piece that has been enabled to move is a White Pawn...but we should really have this is a separate
 			method somewhere...how would this work.
@@ -234,27 +241,175 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
 
 
 
+
+    //Rook
+    if (pieceName.contains("Rook")) {
+      Boolean inTheWay = false;
+      if (((landingX<0)||(landingX>7))||((landingY<0)||(landingY>7))) {
+        validMove = false;
+      }
+      else {
+        if (((Math.abs(startX-landingX)!=0) && (Math.abs(startY-landingY)==0))
+        ||((Math.abs(startX-landingX)==0) && (Math.abs(landingY-startY)!=0))) {
+            if (Math.abs(startX-landingX)!=0) {
+              //int xMovement = Math.abs(startX-landingX);
+              if (startX-landingX > 0) {
+                for (int i=0; i<xMovement; i++) {
+                  if (piecePresent(initialX-(i*75), e.getY())) {
+                    inTheWay = true;
+                    break;
+                  }
+                  else{
+                    inTheWay = false;
+                  }
+                }
+              }
+              else{
+                for (int i = 0; i<xMovement; i++) {
+                  if (piecePresent(initialX+(i*75), e.getY())) {
+                    inTheWay = true;
+                    break;
+                  }
+                  else {
+                    inTheWay = false;
+                  }
+                }
+              }
+            }
+            else {
+              //int yMovement = Math.abs(startY-landingY);
+              if (startY-landingY > 0) {
+                for (int i=0;i<yMovement;i++) {
+                  if (piecePresent(e.getX(),initialY-(i*75))) {
+                    inTheWay = true;
+                    break;
+                  }
+                  else {
+                    inTheWay = false;
+                  }
+                }
+              }
+              else {
+                for (int i=0;i<yMovement;i++) {
+                  if (piecePresent(e.getX(),initialY+(i*75))) {
+                    inTheWay = true;
+                    break;
+                  }
+                  else {
+                    inTheWay = false;
+                  }
+                }
+              }
+            }
+
+            if (inTheWay) {
+              validMove = false;
+            }
+            else{
+              if (piecePresent(e.getX(), (e.getY()))) {
+                if (pieceName.contains("White")) {
+                  if (checkWhiteOponent(e.getX(),e.getY())) {
+                    validMove = true;
+                  }
+                  else{
+                    validMove = false;
+                  }
+                }
+                else {
+                  if (checkBlackOponent(e.getX(), e.getY())) {
+                    validMove = true;
+                  }
+                  else {
+                    validMove = false;
+                  }
+                }
+              }
+              else{
+                validMove = true;
+              }
+            }
+        }
+        else{
+          validMove = false;
+        }
+      }
+    }
+
+
+
+
+
+
     //Bishop
 
     if(pieceName.contains("Bishup")){
-      if ((landingX < 0 || landingX > 7) || (landingY < 0 || landingY > 7 )) {
+      //diagonal movement
+      Boolean inTheWay = false;
+      int distance = Math.abs(startX-landingX);
+      if(((landingX < 0) || (landingX > 7)) || ((landingY < 0)||(landingY > 7))){
         validMove = false;
       }
       else{
-        if (xMovement == yMovement) {
-          if (!piecePresent(e.getX(), e.getY())) {
-              validMove = true;
-              if (pieceName.contains("White")) {
-                 if (checkWhiteOponent(e.getX(), e.getY())) {
-                   validMove = true;
-                 }
+        validMove = true;
+        if (Math.abs(startX-landingX)==Math.abs(startY-landingY)) {
+          if ((startX-landingX < 0)&&(startY-landingY < 0)) {
+            for (int i=0; i<distance; i++) {
+              if (piecePresent((initialX+(i*75)), (initialY-(i*75)))) {
+                inTheWay = true;
               }
-              else{
-                 if (checkBlackOponent(e.getX(), e.getY())) {
-                   validMove = true;
-                 }
-             }
+            }
           }
+          else if ((startX-landingX<0)&&(startY-landingY>0)) {
+            for (int i=0; i<distance; i++) {
+              if (piecePresent((initialX+(i*75)), (initialY-(i*75)))) {
+                inTheWay = true;
+              }
+            }
+          }
+          else if ((startX-landingX<0)&&(startY-landingY>0)) {
+            for (int i=0; i<distance; i++) {
+              if (piecePresent((initialX-(i*75)), (initialY-(i*75)))) {
+                inTheWay = true;
+              }
+            }
+          }
+          else if ((startX-landingX<0)&&(startY-landingY>0)) {
+            for (int i=0; i<distance; i++) {
+              if (piecePresent((initialX-(i*75)), (initialY+(i*75)))) {
+                inTheWay = true;
+              }
+            }
+          }
+
+          if (inTheWay) {
+            validMove = false;
+          }
+          else {
+            if(piecePresent(e.getX(), (e.getY()))){
+              if (pieceName.contains("White")) {
+                if (checkWhiteOponent(e.getX(), e.getY())) {
+                  validMove = true;
+                }
+                else {
+                  validMove = false;
+                }
+              }
+              else {
+                if (checkBlackOponent(e.getX(), e.getY())) {
+                  validMove = true;
+                }
+                else {
+                  validMove = false;
+                }
+              }
+            }
+            else {
+              validMove = true;
+            }
+          }
+        }
+        else {
+          validMove = false;
         }
       }
     }
@@ -277,7 +432,11 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
 
 
 
+    //Rook Piece
 
+    if(pieceName.contains("Rook")){
+          validMove = true;
+    }
 
 
 
@@ -319,7 +478,7 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
       //if Black Pawn is in starting position you can move it (6 = second row in the bottom)
       if(startY == 6){ //pawn making first move
         if (((yMovement==1)||(yMovement==2)) && (startY>landingY) && (xMovement==0)) {
-            //prevention is piece present ahead - same x coordinate
+            //prevention if piece present ahead - same y coordinate
             if (yMovement == 2) {
               if ((!piecePresent(e.getX(), e.getY())) && (!piecePresent(e.getX(), e.getY()+75))) {
                 validMove = true;
@@ -372,8 +531,51 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
 
 
     //White pawn
-
     if(pieceName.equals("WhitePawn")){
+      //if Black Pawn is in starting position you can move it (6 = second row in the bottom)
+      if(startY == 1){ //pawn making first move
+        if (((yMovement==1)||(yMovement==2)) && (startY<landingY) && (xMovement==0)) {
+            //prevention if piece present ahead - same y coordinate
+            if (yMovement == 2) {
+              if ((!piecePresent(e.getX(), e.getY())) && (!piecePresent(e.getX(), e.getY()+75))) {
+                validMove = true;
+              }
+            }
+            else{
+                if (!piecePresent(e.getX(), e.getY())) {
+                    validMove = true;
+                }
+            }
+        }
+        //diagonal movement for black pawn
+        else if ((yMovement==1)&&(startY<landingY)&&(xMovement==1)) {
+          //determine piece
+          if (piecePresent(e.getX(), e.getY())) {
+            if (checkWhiteOponent(e.getX(), e.getY())) {
+              validMove = true;
+            }
+          }
+        }
+      }
+      //pawn making all subsequent moves
+      else{
+        if ((yMovement==1) && (startY<landingY) && (xMovement==0)){
+          if (!piecePresent(e.getX(), e.getY())) {
+              validMove = true;
+          }
+        }
+        else if ((yMovement==1)&&(startY<landingY)&&(xMovement==1)) {
+          //determine piece
+          if (piecePresent(e.getX(), e.getY())) {
+            if (checkWhiteOponent(e.getX(), e.getY())) {
+              validMove = true;
+            }
+          }
+        }
+      }
+    }
+
+  /*  if(pieceName.equals("WhitePawn")){
 			if(startY == 1)
 			{
 				if((startX == (e.getX()/75))&&((((e.getY()/75)-startY)==1)||((e.getY()/75)-startY)==2))
@@ -439,7 +641,7 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
 					validMove = false;
 				}
 			}
-		}
+		}*/
 		if(!validMove){
 			int location=0;
 			if(startY ==0){
