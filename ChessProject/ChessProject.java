@@ -195,6 +195,7 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
 
         chessPiece.setVisible(false);
 		Boolean success =false;
+    Boolean progression = false;
         Component c =  chessBoard.findComponentAt(e.getX(), e.getY());
 		String tmp = chessPiece.getIcon().toString();
 		String pieceName = tmp.substring(0, (tmp.length()-4));
@@ -532,6 +533,7 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
 
     //White pawn
     if(pieceName.equals("WhitePawn")){
+      Boolean inTheWay = false;
       //if Black Pawn is in starting position you can move it (6 = second row in the bottom)
       if(startY == 1){ //pawn making first move
         if (((yMovement==1)||(yMovement==2)) && (startY<landingY) && (xMovement==0)) {
@@ -562,13 +564,25 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
         if ((yMovement==1) && (startY<landingY) && (xMovement==0)){
           if (!piecePresent(e.getX(), e.getY())) {
               validMove = true;
+              if(landingY == 7){
+                success = true;
+              }
           }
+          else {
+            validMove = false;
+          }
+        }
+        else{
+          inTheWay = false;
         }
         else if ((yMovement==1)&&(startY<landingY)&&(xMovement==1)) {
           //determine piece
           if (piecePresent(e.getX(), e.getY())) {
             if (checkWhiteOponent(e.getX(), e.getY())) {
               validMove = true;
+              if(landingY == 7){
+                success = true;
+              }
             }
           }
         }
@@ -672,6 +686,23 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
 			    	parent.add(pieces);
 				}
 			}
+      else if (progression) {
+        int location = 0 + (e.getX()/75);
+				if (c instanceof JLabel){
+	            	Container parent = c.getParent();
+	            	parent.remove(0);
+					pieces = new JLabel( new ImageIcon("BlackQueen.png") );
+					parent = (JPanel)chessBoard.getComponent(location);
+			    	parent.add(pieces);
+				}
+				else{
+					Container parent = (Container)c;
+	            	pieces = new JLabel( new ImageIcon("BlackQueen.png") );
+					parent = (JPanel)chessBoard.getComponent(location);
+			    	parent.add(pieces);
+				}
+      }
+
 			else{
 				if (c instanceof JLabel){
 	            	Container parent = c.getParent();
