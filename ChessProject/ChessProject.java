@@ -249,6 +249,7 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
       if (((landingX<0)||(landingX>7))||((landingY<0)||(landingY>7))) {
         validMove = false;
       }
+
       else {
         if (((Math.abs(startX-landingX)!=0) && (Math.abs(startY-landingY)==0))
         ||((Math.abs(startX-landingX)==0) && (Math.abs(landingY-startY)!=0))) {
@@ -341,7 +342,61 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
 
 
 
-    //Bishop
+
+
+
+
+
+
+
+
+    /*
+    ------------------------------
+            Queen Piece
+    ------------------------------
+    */
+
+    if(pieceName.equals("Queen")){
+          if((landingX < 0 || landingX > 7) || (landingY < 0 || landingY > 7)){
+            validMove = false;
+          }
+    }
+
+
+
+
+
+
+
+
+    /*
+    ------------------------------
+            Rook Piece
+    ------------------------------
+    */
+
+    if(pieceName.contains("Rook")){
+          validMove = true;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /*
+    ------------------------------
+            Bishop Piece
+    ------------------------------
+    */
 
     if(pieceName.contains("Bishup")){
       //diagonal movement
@@ -423,29 +478,18 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
 
 
 
-    //Queen Piece
-
-    if(pieceName.equals("Queen")){
-          validMove = true;
-    }
 
 
 
 
+    /*
+    ------------------------------
+            Knight Piece
+    ------------------------------
+    */
 
-    //Rook Piece
-
-    if(pieceName.contains("Rook")){
-          validMove = true;
-    }
-
-
-
-
-    //Knight Piece
-
-    //moving in an L direction
     if (pieceName.contains("Knight")) {
+      //moving in an L direction
       if (((xMovement == 1)&&(yMovement ==2)) || ((xMovement == 2) && (yMovement == 1))) {
             if (!piecePresent(e.getX(), e.getY())) {
               validMove = true;
@@ -473,7 +517,16 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
 
 
 
-    //Black Pawn
+
+
+
+
+
+    /*
+    ------------------------------
+          Black Pawn Piece
+    ------------------------------
+    */
 
     if(pieceName.equals("BlackPawn")){
       //if Black Pawn is in starting position you can move it (6 = second row in the bottom)
@@ -506,6 +559,12 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
         if ((yMovement==1) && (startY>landingY) && (xMovement==0)){
           if (!piecePresent(e.getX(), e.getY())) {
               validMove = true;
+              if(landingY == 0){
+                progression = true;
+              }
+          }
+          else {
+            validMove = false;
           }
         }
         else if ((yMovement==1)&&(startY>landingY)&&(xMovement==1)) {
@@ -513,6 +572,9 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
           if (piecePresent(e.getX(), e.getY())) {
             if (checkBlackOponent(e.getX(), e.getY())) {
               validMove = true;
+              if(landingY == 0){
+                progression = true;
+              }
             }
           }
         }
@@ -531,7 +593,13 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
 
 
 
-    //White pawn
+
+    /*
+    ------------------------------
+          White Pawn Piece
+    ------------------------------
+    */
+
     if(pieceName.equals("WhitePawn")){
       Boolean inTheWay = false;
       //if Black Pawn is in starting position you can move it (6 = second row in the bottom)
@@ -539,7 +607,7 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
         if (((yMovement==1)||(yMovement==2)) && (startY<landingY) && (xMovement==0)) {
             //prevention if piece present ahead - same y coordinate
             if (yMovement == 2) {
-              if ((!piecePresent(e.getX(), e.getY())) && (!piecePresent(e.getX(), e.getY()+75))) {
+              if ((!piecePresent(e.getX(), e.getY())) && (!piecePresent(e.getX(), e.getY()-75))) {
                 validMove = true;
               }
             }
@@ -572,9 +640,6 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
             validMove = false;
           }
         }
-        else{
-          inTheWay = false;
-        }
         else if ((yMovement==1)&&(startY<landingY)&&(xMovement==1)) {
           //determine piece
           if (piecePresent(e.getX(), e.getY())) {
@@ -589,73 +654,23 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
       }
     }
 
-  /*  if(pieceName.equals("WhitePawn")){
-			if(startY == 1)
-			{
-				if((startX == (e.getX()/75))&&((((e.getY()/75)-startY)==1)||((e.getY()/75)-startY)==2))
-				{
-					if((((e.getY()/75)-startY)==2)){
-						if((!piecePresent(e.getX(), (e.getY())))&&(!piecePresent(e.getX(), (e.getY()+75)))){
-							validMove = true;
-						}
-						else{
-							validMove = false;
-						}
-					}
-					else{
-						if((!piecePresent(e.getX(), (e.getY()))))
-						{
-							validMove = true;
-						}
-						else{
-							validMove = false;
-						}
-					}
-				}
-				else{
-					validMove = false;
-				}
-			}
-      //white taking pieces
-      else{ //second move for pawn
-				int newY = e.getY()/75;
-				int newX = e.getX()/75;
-				if((startX-1 >=0)||(startX +1 <=7))
-				{
-					if((piecePresent(e.getX(), (e.getY())))&&((((newX == (startX+1)&&(startX+1<=7)))||((newX == (startX-1))&&(startX-1 >=0)))))
-					{
-						if(checkWhiteOponent(e.getX(), e.getY())){
-							validMove = true;
-							if(startY == 6){
-								success = true;
-							}
-						}
-						else{
-							validMove = false;
-						}
-					}
-					else{
-						if(!piecePresent(e.getX(), (e.getY()))){
-							if((startX == (e.getX()/75))&&((e.getY()/75)-startY)==1){
-								if(startY == 6){
-									success = true;
-								}
-								validMove = true;
-							}
-							else{
-								validMove = false;
-							}
-						}
-						else{
-							validMove = false;
-						}
-					}
-				}
-				else{
-					validMove = false;
-				}
-			}
-		}*/
+
+
+
+
+
+
+
+
+
+
+
+    /*
+    ---------------------------------------
+          Black/White Pawn Replacement
+    ---------------------------------------
+    */
+
 		if(!validMove){
 			int location=0;
 			if(startY ==0){
