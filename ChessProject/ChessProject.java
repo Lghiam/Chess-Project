@@ -22,12 +22,12 @@ import javax.swing.*;
         Bishop - working
         Rook - working
         Queen - working
-        King - working
+        King - working (without check system)
         Black pawn - working
         White pawn - working
         Knight - working
         Turn method -
-        Win message - working (to an extent)
+        Win message - working (first part - taking King)
         Pieces can't go off board - working
 
 ---------------------------------------------
@@ -185,12 +185,13 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
   		JLabel awaitingPiece = (JLabel)c1;
   		String tmp1 = awaitingPiece.getIcon().toString();
 
+      //White winner prompt
+      if ((tmp1.contains("BlackKing"))) {
+        JOptionPane.showMessageDialog(null,"White is the winner");
+        System.exit(0);
+      }
 
       if(((tmp1.contains("Black")))){
-        if ((tmp1.contains("BlackKing"))) {
-          JOptionPane.showMessageDialog(null,"Black is the winner");
-          System.exit(0);
-        }
   			opponent = true;
   		}
   		else{
@@ -215,6 +216,11 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
   		JLabel awaitingPiece = (JLabel)c1;
   		String tmp1 = awaitingPiece.getIcon().toString();
 
+      //Black winner prompt
+      if ((tmp1.contains("WhiteKing"))) {
+        JOptionPane.showMessageDialog(null,"Black is the winner");
+        System.exit(0);
+      }
 
   		if(((tmp1.contains("White")))){
   			opponent = true;
@@ -327,26 +333,6 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
       75 - height & width of the square [tile]
 		*/
 
-
-
-
-
-
-
-
-
-
-    /*
-    ----------------------------------------------------------------------------
-    previously used to catch pieces off board:
-
-    if(((landingX < 0) || (landingX > 7)) || ((landingY < 0)||(landingY > 7))){
-      validMove = false;
-    }
-
-    instead used try/catch
-    ----------------------------------------------------------------------------
-    */
 
     try{
 
